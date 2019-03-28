@@ -1,11 +1,13 @@
 # ecoproph
 Energy Consumption Prophet - A Machine Learning based Energy Forecast
 
-<img src="https://github.com/giftzwerg133/ecoproph/blob/master/resource/logo.png" width="400">
+<img src="/assets/logo.png" width="400">
 
 ## Reduce the resolution from the dataset from seconds to minutes
+This function creates a new folder 'minutes' in the given path and saves
+an according .csv for every data file
 ```
-python src/reduce_dataset_minutes.py --path R:/ecoproph/Dataset/2018
+python3 src/reduce_dataset_minutes.py --path R:/ecoproph/Dataset/2018
 ```
 - new file is .csv format
 - new file starts with header
