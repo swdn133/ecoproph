@@ -1,3 +1,4 @@
+
 import argparse
 import os
 import pandas as pd
@@ -22,10 +23,8 @@ def reduce_dataset_minutes(directory):
 	                    if (line[0:8] == "YYYYMMDD"):
 	                        break;  # found header
 	                    header_line += 1
-	                df = pd.read_csv(file, sep=';\t', header=header_line, engine='python')
+	                df = pd.read_csv(file, sep=';\t', dtype={'hhmmss': object}, header=header_line, engine='python')
 	                print("{} - {}s".format(cnt, time.time()-start))
-	                # every second must have the same format
-	                df['hhmmss'] = df['hhmmss'].astype(str).str.zfill(6)
 	                df['secs'] = df['hhmmss'].astype(str).str[4:]
 	                # drop unnecessary 59 seconds - just keep the first second
 	                df = df[df.secs == '00']
