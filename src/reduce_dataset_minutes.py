@@ -1,4 +1,3 @@
-
 import argparse
 import os
 import pandas as pd
@@ -48,3 +47,4 @@ if __name__ == '__main__':
     # run the main function
     num_errors = reduce_dataset_minutes(args.path)
     print("Finished with {} Errors!".format(num_errors))
+    
