@@ -1,7 +1,7 @@
 # ecoproph
 Energy Consumption Prophet - A Machine Learning based Energy Forecast
 
-[logo]({{ site.url }}/assets/logo.png)
+![logo](/assets/logo.png)
 
 ## Reduce the resolution from the dataset from seconds to minutes
 This function creates a new folder 'minutes' in the given path and saves
