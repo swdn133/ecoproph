@@ -15,3 +15,19 @@ python3 src/reduce_dataset_minutes.py --path R:/ecoproph/Dataset/2018
 
 Depending on the number of files this procedure can be pretty time consuming!
 
+## Import Data in Pandas Dataframe
+- Import the cleaned .csv Data
+- Drop all Rows containing err flags
+```
+import sys
+sys.path.append('C:\\workspace\\ecoproph\src\\')
+import datasetutils as du
+
+directory = "R:\\ecoproph\\Dataset\\2018\\minutes_2018_new"
+col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'unixtimestamp',
+                   'AEZ-P_SUM']
+
+df = du.load_dataset_from_directory_partial(directory, col_of_interest)
+
+print(df.shape)
+```
