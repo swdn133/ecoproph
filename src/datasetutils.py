@@ -113,3 +113,20 @@ def load_dataset_from_directory_partial_average_hours(directory, col_of_interest
     sys.stdout.write('\n')
 
     return big_df
+
+
+def load_multiple_datasets_average_hours(direcotries: list, col_of_interest: list):
+    """
+    @param directories: a list of strings that contains all the directories where
+           data is stored
+    @param col_of_interest: list with containing the names of the
+           columns of interest (string)
+    @return: a single pandas DataFrame that contains all the selected data,
+             averaged by hours
+    """       
+    df_ret = pd.DataFrame()
+    for d in direcotries:
+        df_tmp = load_dataset_from_directory_partial_average_hours(d, col_of_interest)
+        df_ret = pd.concat([df_ret, df_tmp])
+
+    return df_ret
