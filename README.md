@@ -18,6 +18,7 @@ Depending on the number of files this procedure can be pretty time consuming!
 ## Import Data in Pandas Dataframe
 - Import the cleaned .csv Data
 - Drop all Rows containing err flags
+
 ```
 import sys
 sys.path.append('C:\\workspace\\ecoproph\src\\')
