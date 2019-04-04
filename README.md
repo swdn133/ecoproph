@@ -37,15 +37,16 @@ print(df.shape)
 
 Plotting the data (after cleaning the error fields) results in the following:
 
-| <img src="/assets/data16.png" width="300"> | 
-|:------------------------------------------:|
-| Data AEZ-PSUM for 2016                     | 
+| ![logo](/assets/data16.png) | 
+|:---------------------------:|
+| Data AEZ-PSUM for 2016      | 
 
-| <img src="/assets/data17.png" width="300"> | 
-|:------------------------------------------:|
-| Data AEZ-PSUM for 2017                     | 
+| ![logo](/assets/data17.png) | 
+|:---------------------------:|
+| Data AEZ-PSUM for 2017      | 
 
-| <img src="/assets/data18.png" width="300"> | 
-|:------------------------------------------:|
-| Data AEZ-PSUM for 2018                     | 
+| ![logo](/assets/data18.png) | 
+|:---------------------------:|
+| Data AEZ-PSUM for 2018      | 
+
 
