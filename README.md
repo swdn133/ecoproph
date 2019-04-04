@@ -23,7 +23,7 @@ Depending on the number of files this procedure can be pretty time consuming!
 
 ```python
 import sys
-sys.path.append('C:\\workspace\\ecoproph\src\\')
+sys.path.append('C:\\workspace\\ecoproph\\src\\')
 import datasetutils as du
 
 directory = "R:\\ecoproph\\Dataset\\2018\\minutes_2018_new"
@@ -37,15 +37,15 @@ print(df.shape)
 
 Plotting the data (after cleaning the error fields) results in the following:
 
-| ![logo](/assets/data16.png) | 
-|:---------------------------:|
-| Data AEZ-PSUM for 2016      | 
+| <img src="/assets/data16.png" width="300"> | 
+|:------------------------------------------:|
+| Data AEZ-PSUM for 2016                     | 
 
-| ![logo](/assets/data17.png) | 
-|:---------------------------:|
-| Data AEZ-PSUM for 2017      | 
+| <img src="/assets/data17.png" width="300"> | 
+|:------------------------------------------:|
+| Data AEZ-PSUM for 2017                     | 
 
-| ![logo](/assets/data18.png) | 
-|:---------------------------:|
-| Data AEZ-PSUM for 2018      | 
+| <img src="/assets/data18.png" width="300"> | 
+|:------------------------------------------:|
+| Data AEZ-PSUM for 2018                     | 
 
