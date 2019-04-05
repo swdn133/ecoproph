@@ -21,6 +21,15 @@ keyword_type_map = {
     'R_Bau_TGa-P_SUM': np.float64	
 }
 
+value_limits = {
+    # TODO: real limits
+    'R_BauBGb-P_SUM': [0, 100],
+    'AEZ-P_SUM': [0, 100],
+    'R_BauTGb-P_SUM': [0, 100],
+    'R_BauBGa-P_SUM': [0, 100],
+    'R_Bau_TGa-P_SUM': [0, 100]	
+}
+
 def apply_type_conversion(df, col_of_interest):
     """
     @param df: the dataframe you want the type conversation
@@ -52,8 +61,18 @@ def contains_error(val):
     else:
         return val
 
+def apply_limits(df, col_with_values):    
+    """
+    @param df: the dataframe you want the limits to be applied
+    @return: the same dataframe as input, but with NaN in case
+             of limit violations
+    """    
+    for col in col_with_values:
+        df[df[col] < value_limits[col][0]] = np.nan
+        df[df[col] > value_limits[col][1]] = np.nan
 
-def load_dataset_from_directory_partial(directory, col_of_interest):
+def load_dataset_from_directory_partial(directory, col_of_interest, col_with_values):
+    # TODO: optimize col_of_interest/col_with_values 
     """
     @param directory: directory that stores all the .csv files
            to be considered
@@ -75,6 +94,10 @@ def load_dataset_from_directory_partial(directory, col_of_interest):
                 # drop every row that contains NaN values
                 df_tmp = df_tmp.dropna()
                 apply_type_conversion(df_tmp, col_of_interest)
+                # set all limit violations to NaN
+                apply_limits(df_tmp, col_with_values)
+                # drop every row that contains NaN values
+                df_tmp = df_tmp.dropna()
                 big_df = pd.concat([big_df, df_tmp], ignore_index=True)
                 sys.stdout.write("{} of {}".format(file_cnt, len(directory_list)))
                 sys.stdout.write('\r')
@@ -82,7 +105,8 @@ def load_dataset_from_directory_partial(directory, col_of_interest):
 
     return big_df
 
-def load_dataset_from_directory_partial_average_hours(directory, col_of_interest):
+def load_dataset_from_directory_partial_average_hours(directory, col_of_interest, col_with_values):
+    # TODO: optimize col_of_interest/col_with_values
     """
     @param directory: directory that stores all the .csv files
            to be considered
@@ -104,6 +128,10 @@ def load_dataset_from_directory_partial_average_hours(directory, col_of_interest
                 # drop every row that contains NaN values
                 df_tmp = df_tmp.dropna()
                 apply_type_conversion(df_tmp, col_of_interest)
+                # set all limit violations to NaN
+                apply_limits(df_tmp, col_with_values)
+                # drop every row that contains NaN values
+                df_tmp = df_tmp.dropna()
                 # Average over Hours
                 add_time_columns(df_tmp)
                 df_tmp = df_tmp.groupby(['Hour', 'YYYYMMDD'], as_index=False).mean()
@@ -115,7 +143,8 @@ def load_dataset_from_directory_partial_average_hours(directory, col_of_interest
     return big_df
 
 
-def load_multiple_datasets_average_hours(direcotries: list, col_of_interest: list):
+def load_multiple_datasets_average_hours(direcotries: list, col_of_interest: list, col_with_values: list):
+    # TODO: optimize col_of_interest/col_with_values
     """
     @param directories: a list of strings that contains all the directories where
            data is stored
@@ -126,7 +155,8 @@ def load_multiple_datasets_average_hours(direcotries: list, col_of_interest: lis
     """       
     df_ret = pd.DataFrame()
     for d in direcotries:
-        df_tmp = load_dataset_from_directory_partial_average_hours(d, col_of_interest)
+        df_tmp = load_dataset_from_directory_partial_average_hours(d, col_of_interest, col_with_values)
+        # TODO: optimize col_of_interest/col_with_values
         df_ret = pd.concat([df_ret, df_tmp])
 
     return df_ret
