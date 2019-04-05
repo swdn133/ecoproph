@@ -27,8 +27,7 @@ sys.path.append('C:\\workspace\\ecoproph\\src\\')
 import datasetutils as du
 
 directory = "R:\\ecoproph\\Dataset\\2018\\minutes_2018_new"
-col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'unixtimestamp',
-                   'AEZ-P_SUM']
+col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'AEZ-P_SUM']
 
 df = du.load_dataset_from_directory_partial(directory, col_of_interest)
 
