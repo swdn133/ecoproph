@@ -36,16 +36,15 @@ print(df.shape)
 
 Plotting the data (after cleaning the error fields) results in the following:
 
-| ![logo](/assets/data16.png) | 
-|:---------------------------:|
-| Data AEZ-PSUM for 2016      | 
+| ![logo](/assets/data16.png) | ![histo](/assets/histo_16_AEZ-P_SUM__small.png) |
+|:---------------------------:|:-----------------------------------------------:|
+| Data AEZ-PSUM for 2016      |  Histogram AEZ-PSUM for 2016                    |
 
-| ![logo](/assets/data17.png) | 
-|:---------------------------:|
-| Data AEZ-PSUM for 2017      | 
+| ![logo](/assets/data17.png) | ![histo](/assets/histo_17_AEZ-P_SUM__small.png) |
+|:---------------------------:|:-----------------------------------------------:|
+| Data AEZ-PSUM for 2017      |  Histogram AEZ-PSUM for 2017                    |
 
-| ![logo](/assets/data18.png) | 
-|:---------------------------:|
-| Data AEZ-PSUM for 2018      | 
-
+| ![logo](/assets/data18.png) | ![histo](/assets/histo_18_AEZ-P_SUM__small.png) |
+|:---------------------------:|:-----------------------------------------------:|
+| Data AEZ-PSUM for 2018      |  Histogram AEZ-PSUM for 2018                    |
 
