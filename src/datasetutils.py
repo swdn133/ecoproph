@@ -21,6 +21,15 @@ keyword_type_map = {
     'R_Bau_TGa-P_SUM': np.float64	
 }
 
+value_limits = {
+    # TODO: real limits
+    'R_BauBGb-P_SUM': [0, 100],
+    'AEZ-P_SUM': [0, 100],
+    'R_BauTGb-P_SUM': [0, 100],
+    'R_BauBGa-P_SUM': [0, 100],
+    'R_Bau_TGa-P_SUM': [0, 100]	
+}
+
 def apply_type_conversion(df, col_of_interest):
     """
     @param df: the dataframe you want the type conversation
@@ -52,6 +61,21 @@ def contains_error(val):
     else:
         return val
 
+def apply_limits(df, col_of_interest):    
+    """
+    @param df: the dataframe you want the limits to be applied
+    @param col_of_interest: the columns you want the limits to
+           be applied.
+    @return: the same dataframe as input, but with NaN in case
+             of limit violations
+    """    
+    for col in col_of_interest:
+        if not col in value_limits:
+            # we only can apply limits if there are any defined
+            continue
+
+        df[df[col] < value_limits[col][0]] = np.nan
+        df[df[col] > value_limits[col][1]] = np.nan
 
 def load_dataset_from_directory_partial(directory, col_of_interest):
     """
@@ -75,6 +99,10 @@ def load_dataset_from_directory_partial(directory, col_of_interest):
                 # drop every row that contains NaN values
                 df_tmp = df_tmp.dropna()
                 apply_type_conversion(df_tmp, col_of_interest)
+                # set all limit violations to NaN
+                apply_limits(df_tmp, col_of_interest)
+                # drop every row that contains NaN values
+                df_tmp = df_tmp.dropna()
                 big_df = pd.concat([big_df, df_tmp], ignore_index=True)
                 sys.stdout.write("{} of {}".format(file_cnt, len(directory_list)))
                 sys.stdout.write('\r')
@@ -104,6 +132,10 @@ def load_dataset_from_directory_partial_average_hours(directory, col_of_interest
                 # drop every row that contains NaN values
                 df_tmp = df_tmp.dropna()
                 apply_type_conversion(df_tmp, col_of_interest)
+                # set all limit violations to NaN
+                apply_limits(df_tmp, col_of_interest)
+                # drop every row that contains NaN values
+                df_tmp = df_tmp.dropna()
                 # Average over Hours
                 add_time_columns(df_tmp)
                 df_tmp = df_tmp.groupby(['Hour', 'YYYYMMDD'], as_index=False).mean()
