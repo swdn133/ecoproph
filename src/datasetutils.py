@@ -23,11 +23,11 @@ keyword_type_map = {
 
 value_limits = {
     # TODO: real limits
-    'R_BauBGb-P_SUM': [0, 100],
-    'AEZ-P_SUM': [0, 100],
-    'R_BauTGb-P_SUM': [0, 100],
-    'R_BauBGa-P_SUM': [0, 100],
-    'R_Bau_TGa-P_SUM': [0, 100]	
+    'AEZ-P_SUM': [5, 75],
+    'R_BauBGa-P_SUM': [5, 60],
+    'R_BauBGb-P_SUM': [5, 40],
+    'R_Bau_TGa-P_SUM': [25, 250],
+    'R_BauTGb-P_SUM': [25, 275]
 }
 
 def apply_type_conversion(df, col_of_interest):
