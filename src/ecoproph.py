@@ -37,6 +37,7 @@ def convert_timestamp_to_string(unixtime):
 
 
 def main():
+    # select and load the data
     col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'AEZ-P_SUM',
                        'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM']
 
@@ -45,18 +46,26 @@ def main():
     directory16 = "R:\\ecoproph\\Messdaten_HM\\2016\\minutes_2016_new\\2016_newcol"
 
     print("loading datasets...")
+    start = datetime.now()
     df = du.load_multiple_datasets_average_hours([directory16, directory17, directory18],
                                                  col_of_interest)
 
+    print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
     prophet_df = build_prophet_dataframe(df, 'AEZ-P_SUM')
 
+    # creating and fitting the model
     model = Prophet()
     print("Model fitting...")
+    start = datetime.now()
     model.fit(prophet_df)
+    print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
 
+    # Predicting the future
     future = model.make_future_dataframe(periods=365)
     print("Predict future for 365 days...")
+    start = datetime.now()
     forecast = model.predict(future)
+    print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
 
     print("plotting")
     model.plot(forecast)
