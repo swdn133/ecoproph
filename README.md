@@ -48,3 +48,37 @@ Plotting the data (after cleaning the error fields) results in the following:
 |:---------------------------:|:-----------------------------------------------:|
 | Data AEZ-PSUM for 2018      |  Histogram AEZ-PSUM for 2018                    |
 
+## Main Functionality
+- Load the Datasets
+- Create a Regression Model with Facebook Prophet
+- Fit the model
+- Predit the future
+- Plot the prediction and save the plots
+    - Prediction and Training Data
+    - Regression Components
+
+```
+$ cd src
+$ python3 ./ecoproph.py
+```
+
+will save the created plots in the root folder.
+
+Please adapt the script to your needs. Currently, the Paths to the datasets
+and plot outputs are hardcoded absolute paths. This might be resolved in a
+later release.
+
+### WIP: Regression Model
+The first step is the most primitive fbprophet model available. No tweaks
+were made. It's simply the datasets for three years are fit to the primitive 
+model and a forecast for a span of a year is done.
+
+### Results
+This are the results of the primitive, unoptimized model just at the first shot:
+| ![forecast](/assets/forecast__small.png) |
+|:----------------------------------------:|
+| Facebook Prophet forecast                |
+
+| ![components](/assets/components__small/png) |
+|:--------------------------------------------:|
+| Plot of the regression components            |
