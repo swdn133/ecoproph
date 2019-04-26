@@ -75,10 +75,12 @@ model and a forecast for a span of a year is done.
 
 ### Results
 This are the results of the primitive, unoptimized model just at the first shot:
+
 | ![forecast](/assets/forecast__small.png) |
 |:----------------------------------------:|
 | Facebook Prophet forecast                |
 
-| ![components](/assets/components__small/png) |
+
+| ![components](/assets/components__small.png) |
 |:--------------------------------------------:|
 | Plot of the regression components            |
