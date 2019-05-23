@@ -55,8 +55,8 @@ def main():
 
     # creating and fitting the model
     df_holidays = holidays_hm.get_holidays_dataframe()
-    model = Prophet(yearly_seasonality=True, weekly_seasonality=True, daily_seasonality=True, 
-                holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.005)
+    model = Prophet(yearly_seasonality=5, weekly_seasonality=True, daily_seasonality=True, 
+                holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.001)
     print("Model fitting...")
     start = datetime.now()
     model.fit(prophet_df)
