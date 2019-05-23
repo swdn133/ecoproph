@@ -6,7 +6,7 @@ from fbprophet import Prophet
 
 
 import datasetutils as du
-
+import holidays_hm
 
 def build_prophet_dataframe(input_data, value_column):
     """
@@ -39,7 +39,7 @@ def convert_timestamp_to_string(unixtime):
 def main():
     # select and load the data
     col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'AEZ-P_SUM',
-                       'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM']
+                       'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM', 'R_BauTGb-P_SUM']
 
     directory18 = "R:\\ecoproph\\Messdaten_HM\\2018\\minutes_2018_new"
     directory17 = "R:\\ecoproph\\Messdaten_HM\\2017\\minutes_2017_new"
@@ -51,10 +51,12 @@ def main():
                                                  col_of_interest)
 
     print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
-    prophet_df = build_prophet_dataframe(df, 'AEZ-P_SUM')
+    prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
 
     # creating and fitting the model
-    model = Prophet()
+    df_holidays = holidays_hm.get_holidays_dataframe()
+    model = Prophet(yearly_seasonality=True, weekly_seasonality=True, daily_seasonality=True, 
+                holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.005)
     print("Model fitting...")
     start = datetime.now()
     model.fit(prophet_df)
