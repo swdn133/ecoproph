@@ -63,7 +63,7 @@ def main():
     print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
 
     # Predicting the future
-    future = model.make_future_dataframe(periods=365)
+    future = model.make_future_dataframe(periods=365*24, freq='H')
     print("Predict future for 365 days...")
     start = datetime.now()
     forecast = model.predict(future)
