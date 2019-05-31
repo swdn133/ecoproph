@@ -22,7 +22,6 @@ keyword_type_map = {
 }
 
 value_limits = {
-    # TODO: real limits
     'AEZ-P_SUM': [5, 75],
     'R_BauBGa-P_SUM': [5, 60],
     'R_BauBGb-P_SUM': [5, 40],
@@ -70,12 +69,9 @@ def apply_limits(df, col_of_interest):
              of limit violations
     """    
     for col in col_of_interest:
-        if not col in value_limits:
-            # we only can apply limits if there are any defined
-            continue
-
-        df[df[col] < value_limits[col][0]] = np.nan
-        df[df[col] > value_limits[col][1]] = np.nan
+        if col in value_limits:
+            df[df[col] < value_limits[col][0]] = np.nan
+            df[df[col] > value_limits[col][1]] = np.nan
 
 def load_dataset_from_directory_partial(directory, col_of_interest):
     """

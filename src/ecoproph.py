@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from fbprophet import Prophet
+import pickle
 
 
 import datasetutils as du
@@ -54,13 +55,20 @@ def main():
     prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
 
     # creating and fitting the model
-    df_holidays = holidays_hm.get_holidays_dataframe()
-    model = Prophet(yearly_seasonality=5, weekly_seasonality=True, daily_seasonality=True, 
-                holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.001)
-    print("Model fitting...")
-    start = datetime.now()
-    model.fit(prophet_df)
-    print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
+    try:
+        print("Try to read model parameters...")
+        fin = open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb')
+        model = pickle.load(fin)
+    except FileNotFoundError:
+        df_holidays = holidays_hm.get_holidays_dataframe()
+        model = Prophet(yearly_seasonality=5, weekly_seasonality=True, daily_seasonality=True, 
+                    holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.001)
+        print("Model fitting...")
+        start = datetime.now()
+        model.fit(prophet_df)
+        print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
+        with open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'wb') as fout:
+            pickle.dump(model, fout)
 
     # Predicting the future
     future = model.make_future_dataframe(periods=365*24, freq='H')
