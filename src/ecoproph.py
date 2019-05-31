@@ -7,7 +7,7 @@ import pickle
 
 
 import datasetutils as du
-
+import holidays_hm
 
 def build_prophet_dataframe(input_data, value_column):
     """
@@ -40,7 +40,7 @@ def convert_timestamp_to_string(unixtime):
 def main():
     # select and load the data
     col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'AEZ-P_SUM',
-                       'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM']
+                       'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM', 'R_BauTGb-P_SUM']
 
     directory18 = "R:\\ecoproph\\Messdaten_HM\\2018\\minutes_2018_new"
     directory17 = "R:\\ecoproph\\Messdaten_HM\\2017\\minutes_2017_new"
@@ -52,7 +52,7 @@ def main():
                                                  col_of_interest)
 
     print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
-    prophet_df = build_prophet_dataframe(df, 'AEZ-P_SUM')
+    prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
 
     # creating and fitting the model
     try:
@@ -60,7 +60,9 @@ def main():
         fin = open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb')
         model = pickle.load(fin)
     except FileNotFoundError:
-        model = Prophet()
+        df_holidays = holidays_hm.get_holidays_dataframe()
+        model = Prophet(yearly_seasonality=5, weekly_seasonality=True, daily_seasonality=True, 
+                    holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.001)
         print("Model fitting...")
         start = datetime.now()
         model.fit(prophet_df)
@@ -69,7 +71,7 @@ def main():
             pickle.dump(model, fout)
 
     # Predicting the future
-    future = model.make_future_dataframe(periods=365)
+    future = model.make_future_dataframe(periods=365*24, freq='H')
     print("Predict future for 365 days...")
     start = datetime.now()
     forecast = model.predict(future)
