@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from fbprophet import Prophet
+import pickle
 
 
 import datasetutils as du
@@ -54,11 +55,18 @@ def main():
     prophet_df = build_prophet_dataframe(df, 'AEZ-P_SUM')
 
     # creating and fitting the model
-    model = Prophet()
-    print("Model fitting...")
-    start = datetime.now()
-    model.fit(prophet_df)
-    print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
+    try:
+        print("Try to read model parameters...")
+        fin = open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb')
+        model = pickle.load(fin)
+    except FileNotFoundError:
+        model = Prophet()
+        print("Model fitting...")
+        start = datetime.now()
+        model.fit(prophet_df)
+        print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
+        with open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'wb') as fout:
+            pickle.dump(model, fout)
 
     # Predicting the future
     future = model.make_future_dataframe(periods=365)
