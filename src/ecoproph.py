@@ -46,20 +46,22 @@ def main():
     directory17 = "R:\\ecoproph\\Messdaten_HM\\2017\\minutes_2017_new"
     directory16 = "R:\\ecoproph\\Messdaten_HM\\2016\\minutes_2016_new\\2016_newcol"
 
-    print("loading datasets...")
-    start = datetime.now()
-    df = du.load_multiple_datasets_average_hours([directory16, directory17, directory18],
-                                                 col_of_interest)
 
-    print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
-    prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
 
     # creating and fitting the model
     try:
         print("Try to read model parameters...")
-        fin = open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb')
-        model = pickle.load(fin)
+        with open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb') as fin:
+            model = pickle.load(fin)
     except FileNotFoundError:
+        print("No saved .pckl model found! Creating new model...")
+        print("loading datasets...")
+        start = datetime.now()
+        df = du.load_multiple_datasets_average_hours([directory16, directory17, directory18],
+                                                     col_of_interest)
+
+        print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
+        prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
         df_holidays = holidays_hm.get_holidays_dataframe()
         model = Prophet(yearly_seasonality=5, weekly_seasonality=True, daily_seasonality=True, 
                     holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.001)
