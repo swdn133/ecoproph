@@ -63,8 +63,9 @@ def main():
         print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
         prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
         df_holidays = holidays_hm.get_holidays_dataframe()
-        model = Prophet(yearly_seasonality=5, weekly_seasonality=True, daily_seasonality=True, 
-                    holidays=df_holidays, holidays_prior_scale=100, changepoint_prior_scale=0.001)
+        model = Prophet(yearly_seasonality=6, weekly_seasonality=40, daily_seasonality=10, 
+                    holidays=df_holidays, holidays_prior_scale=80, 
+                    seasonality_prior_scale=100, changepoint_prior_scale=0.0001)
         print("Model fitting...")
         start = datetime.now()
         model.fit(prophet_df)
