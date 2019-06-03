@@ -84,3 +84,21 @@ This are the results of the primitive, unoptimized model just at the first shot:
 | ![components](/assets/components__small.png) |
 |:--------------------------------------------:|
 | Plot of the regression components            |
+
+### Validation
+Validation is done via Prophet's cross-validation method. For validation,
+a saved model has to be provided via a pickle file. 
+Validation can be started via the following command:
+
+```
+$ cd src
+$ python3 ./validation.py
+```
+
+The validation script creates an output plot of the MAPE metric
+saved as .png file:
+
+| ![components](/assets/validation_small.png)  |
+|:--------------------------------------------:|
+| Validation via MAPE metric - plot            |
+
