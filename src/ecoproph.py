@@ -37,17 +37,26 @@ def convert_timestamp_to_string(unixtime):
     return datetime.utcfromtimestamp(unixtime).strftime('%Y-%m-%d %H:%M:%S')
 
 
-def plot_forecast(df, ts_start, ts_stop):
+def plot_forecast(df, ts_start, ts_stop, label=''):
+    """
+    @param df: forecast dataframe
+    @param ts_start: start time of the plot
+    @param ts_stop: end time of the plot
+    """   
+    # retreive the selected data
     df['ds'] = pd.to_datetime(df['ds'])
     df = df.set_index(['ds'])
     df = df.loc[ts_start:ts_stop]
     df = df.reset_index()
+
+    # plot it
     plt.figure()
     plt.plot(df['ds'], df['yhat'], color='blue')
     plt.plot(df['ds'], df['yhat_lower'], color='lightblue')
     plt.plot(df['ds'], df['yhat_upper'], color='lightblue')
-    plt.title('Forecast from ' + ts_start + ' to ' + ts_stop)
-    plt.ylabel('Forecast')
+    plt.xlim((df['ds'].iloc[0], df['ds'].iloc[-1]))
+    plt.title('Forecast ' + label + ' from ' + ts_start + ' to ' + ts_stop)
+    plt.ylabel('R_BauTGb-P_SUM [kW]')
     plt.xlabel('Date')
     plt.xticks(rotation=25)
     plt.fill_between(df['ds'], df['yhat_lower'], df['yhat_upper'], color='lightblue')
@@ -69,6 +78,7 @@ def main():
         print("Try to read model parameters...")
         with open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb') as fin:
             model = pickle.load(fin)
+        print("... Success")
     except FileNotFoundError:
         print("No saved .pckl model found! Creating new model...")
         print("loading datasets...")
@@ -103,7 +113,9 @@ def main():
     model.plot_components(forecast)
     plt.savefig('C:\\workspace\\ecoproph\\components.png', bbox_inches='tight', dpi=500)
     
-    plot_forecast(forecast, '2019-02-04', '2019-03-13')
+    plot_forecast(forecast, '2019-02-04', '2019-03-13', 'R_BauTGb-P_SUM')
+    plt.savefig('C:\\workspace\\ecoproph\\my_plot.png', bbox_inches='tight', dpi=500)
+
     plt.show()
 
 
