@@ -18,7 +18,9 @@ keyword_type_map = {
     'PV_SolarLog_30kW-P_SUM': np.float64,
     'PV_120kW-P_SUM': np.float64,
     'R_BauBGa-P_SUM': np.float64,
-    'R_Bau_TGa-P_SUM': np.float64	
+    'R_Bau_TGa-P_SUM': np.float64,
+    'E_BauXa-P_SUM': np.float64,
+    'E_BauXb-P_SUM': np.float64
 }
 
 value_limits = {

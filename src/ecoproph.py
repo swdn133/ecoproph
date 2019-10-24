@@ -9,6 +9,16 @@ import pickle
 import datasetutils as du
 import holidays_hm
 
+def build_prophet_dataframe_sum(input_data, value_columns: list):
+    prophet_df = pd.DataFrame()
+    input_data['timestring'] = input_data['unixtimestamp'].apply(
+        lambda x: convert_timestamp_to_string(x))
+    prophet_df['ds'] = input_data['timestring']
+    prophet_df['y'] = input_data[value_columns].sum(axis=1)
+
+    return prophet_df
+
+
 def build_prophet_dataframe(input_data, value_column):
     """
     @param imput_data: pandas dataframe that contains the values
@@ -65,7 +75,12 @@ def plot_forecast(df, ts_start, ts_stop, label=''):
 def main():
     # select and load the data
     col_of_interest = ['unixtimestamp', 'YYYYMMDD', 'hhmmss', 'AEZ-P_SUM',
-                       'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM', 'R_BauTGb-P_SUM']
+                       'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM', 'R_Bau_TGa-P_SUM', 'R_BauTGb-P_SUM', 
+                       'E_BauXa-P_SUM', 'E_BauXb-P_SUM']
+
+    power_sum = ['AEZ-P_SUM',
+                 'R_BauBGa-P_SUM', 'R_BauBGb-P_SUM', 'R_Bau_TGa-P_SUM', 'R_BauTGb-P_SUM', 
+                 'E_BauXa-P_SUM', 'E_BauXb-P_SUM']
 
     directory18 = "R:\\ecoproph\\Messdaten_HM\\2018\\minutes_2018_new"
     directory17 = "R:\\ecoproph\\Messdaten_HM\\2017\\minutes_2017_new"
@@ -83,13 +98,13 @@ def main():
         print("No saved .pckl model found! Creating new model...")
         print("loading datasets...")
         start = datetime.now()
-        df = du.load_multiple_datasets_average_hours([directory16, directory17, directory18],
+        df = du.load_multiple_datasets_average_hours([directory17, directory18],
                                                      col_of_interest)
 
         print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
-        prophet_df = build_prophet_dataframe(df, 'R_BauTGb-P_SUM')
+        prophet_df = build_prophet_dataframe_sum(df, power_sum)
         df_holidays = holidays_hm.get_holidays_dataframe()
-        model = Prophet(yearly_seasonality=6, weekly_seasonality=40, daily_seasonality=10, 
+        model = Prophet(yearly_seasonality=6, weekly_seasonality=45, daily_seasonality=10, 
                     holidays=df_holidays, holidays_prior_scale=80, 
                     seasonality_prior_scale=100, changepoint_prior_scale=0.0001)
         print("Model fitting...")
@@ -98,12 +113,18 @@ def main():
         print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
         with open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'wb') as fout:
             pickle.dump(model, fout)
+            print("Saved fitted model")
 
     # Predicting the future
     future = model.make_future_dataframe(periods=365*24, freq='H')
     print("Predict future for 365 days...")
     start = datetime.now()
     forecast = model.predict(future)
+
+    with open('C:\\workspace\\ecoproph\\forecast.pckl', 'wb') as fout:
+        pickle.dump(forecast, fout)
+        print('Saved forecast')
+
     print("Time elapsed [seconds]: ", (datetime.now() - start).total_seconds())
 
     print("plotting")
@@ -113,7 +134,7 @@ def main():
     model.plot_components(forecast)
     plt.savefig('C:\\workspace\\ecoproph\\components.png', bbox_inches='tight', dpi=500)
     
-    plot_forecast(forecast, '2019-02-04', '2019-03-13', 'R_BauTGb-P_SUM')
+    plot_forecast(forecast, '2019-09-01', '2019-09-30', 'R_BauTGb-P_SUM')
     plt.savefig('C:\\workspace\\ecoproph\\my_plot.png', bbox_inches='tight', dpi=500)
 
     plt.show()

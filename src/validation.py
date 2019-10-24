@@ -13,7 +13,7 @@ def validation_main():
             model = pickle.load(fin)
 
         print("Validation begin...")
-        df_cv = cross_validation(model, initial='860 days', period='60 days', horizon = '30 days')
+        df_cv = cross_validation(model, initial='460 days', period='60 days', horizon = '30 days')
         fig = plot_cross_validation_metric(df_cv, metric='mape', rolling_window=0.2)
         plt.savefig('C:\\workspace\\ecoproph\\validation.png', bbox_inches='tight', dpi=500)
 
