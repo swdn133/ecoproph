@@ -26,7 +26,9 @@ def load_forecast_dataframe(path: str):
     return forecast_df
 
 
-def plot_forecast(df, ts_start, ts_stop, label=''):
+def plot_forecast(df, ts_start, ts_stop, label='', text_color='yellow',
+                                                   bg_color='silver',
+                                                   fontsize=18):
     """
     @param df: forecast dataframe
     @param ts_start: start time of the plot
@@ -39,16 +41,23 @@ def plot_forecast(df, ts_start, ts_stop, label=''):
     df = df.reset_index()
 
     # plot it
-    plt.figure()
+    plt.figure(figsize=[12.80, 10.24], dpi=100)
     plt.plot(df['ds'], df['yhat'], color='blue')
     plt.plot(df['ds'], df['yhat_lower'], color='lightblue')
     plt.plot(df['ds'], df['yhat_upper'], color='lightblue')
     plt.xlim((df['ds'].iloc[0], df['ds'].iloc[-1]))
-    plt.title('Forecast ' + label + ' from ' + ts_start + ' to ' + ts_stop)
-    plt.ylabel('R_BauTGb-P_SUM [kW]')
-    plt.xlabel('Date')
-    plt.xticks(rotation=25)
+    plt.title('Forecast ' + label + ' from ' + ts_start + ' to ' + ts_stop, fontsize=20,
+                                                                            weight='semibold',
+                                                                            color=text_color)
+    plt.ylabel('Energy Consumption [kW]', fontsize=fontsize, color=text_color)
+    plt.xlabel('Date', fontsize=fontsize, color=text_color)
+    plt.xticks(rotation=25, color=text_color)
+    plt.yticks(color=text_color)
     plt.fill_between(df['ds'], df['yhat_lower'], df['yhat_upper'], color='lightblue')
+    ax = plt.gca()
+    ax.patch.set_facecolor(bg_color)
+
+
 
 
 def plot_month_forecast_bar(df, label):
