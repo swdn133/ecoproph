@@ -9,11 +9,11 @@ from fbprophet.plot import plot_cross_validation_metric
 def validation_main():
     try:
         print("Try to read model parameters...")
-        with open('C:\\workspace\\ecoproph\\ecoproph.pckl', 'rb') as fin:
+        with open('C:\\workspace\\ecoproph\\ecoproph_experimentalPvModelA100.pckl', 'rb') as fin:
             model = pickle.load(fin)
 
         print("Validation begin...")
-        df_cv = cross_validation(model, initial='460 days', period='60 days', horizon = '30 days')
+        df_cv = cross_validation(model, initial='460 days', period='30 days', horizon = '20 days')
         fig = plot_cross_validation_metric(df_cv, metric='mape', rolling_window=0.2)
         plt.savefig('C:\\workspace\\ecoproph\\validation.png', bbox_inches='tight', dpi=500)
 
