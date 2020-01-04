@@ -9,7 +9,7 @@ from fbprophet.plot import plot_cross_validation_metric
 def validation_main():
     try:
         print("Try to read model parameters...")
-        with open('C:\\workspace\\ecoproph\\ecoproph_experimentalPvModelA100.pckl', 'rb') as fin:
+        with open('C:\\workspace\\ecoproph\\ecoproph_experimentalPvModelBothA100.pckl', 'rb') as fin:
             model = pickle.load(fin)
 
         print("Validation begin...")
