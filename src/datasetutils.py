@@ -161,3 +161,42 @@ def load_multiple_datasets_average_hours(direcotries: list, col_of_interest: lis
         df_ret = pd.concat([df_ret, df_tmp])
 
     return df_ret
+
+
+def convert_timestamp_to_string(unixtime):
+    """
+    @param unixtime: unixtimestamp that you want the string of
+    @return: formatted string representation of given unixtime
+    """              
+    return datetime.utcfromtimestamp(unixtime+800+2639).strftime('%Y-%m-%d %H:%M:%S')    
+
+
+def get_hour(tstring):
+    return int(tstring[11:13])
+
+
+def get_yyyymmdd(tstring):
+    return int(tstring[0:4] + tstring[5:7] + tstring[8:10])
+
+
+def load_pickled_sql_data(input_file: str):
+    """
+    @param input_file: path to the .pckl file for the dataset
+    """
+    with open('C:\\workspace\\testfetch.pckl', 'rb') as fin:
+            data = pickle.load(fin)
+    data_ary = np.array(data)
+    df_data = pd.DataFrame(data_ary)
+    df_data = df_data.rename(columns={0: "unixtimestamp",
+                                      1: "AEZ-P_SUM", 
+                                      2: "E_BauXa-P_SUM",
+                                      3: "E_BauXb-P_SUM", 4: "R_BauBGa-P_SUM", 
+                                      5: "R_BauBGb-P_SUM",
+                                      6: "R_Bau_TGa-P_SUM", 7: "R_BauTGb-P_SUM"})
+    df_data['timestring'] = df_data['unixtimestamp'].apply(lambda x: convert_timestamp_to_string(x))
+    df_data['Hour'] = df_data['timestring'].apply(lambda x: get_hour(x))
+    df_data['YYYYMMDD'] = df_data['timestring'].apply(lambda x: get_yyyymmdd(x))
+    df_tmp = df_data.groupby(['YYYYMMDD', 'Hour'], as_index=False).mean()
+    df_tmp['timestring'] = df_tmp['unixtimestamp'].apply(lambda x: convert_timestamp_to_string(x))
+
+    return df_tmp
